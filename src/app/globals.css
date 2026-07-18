@@ -963,6 +963,7 @@ h1 {
 
 .demo-form-wide,
 .demo-form-note,
+.demo-form-error,
 .demo-form-actions {
   grid-column: 1 / -1;
 }
@@ -975,6 +976,22 @@ h1 {
   border: 1px solid rgba(18, 163, 145, 0.24);
   font-weight: 800;
   line-height: 1.45;
+}
+
+.demo-form-error {
+  padding: 14px 16px;
+  border-radius: 18px;
+  color: #991b1b;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.22);
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
 }
 
 .demo-form-actions {

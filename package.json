@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && node scripts/copy-out-to-dist.mjs",
+    "api:start": "node scripts/demo-api-server.mjs",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "next": "16.1.6",
+    "nodemailer": "^7.0.13",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   }

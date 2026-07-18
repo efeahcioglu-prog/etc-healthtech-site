@@ -329,6 +329,8 @@ export default function Home() {
 
 function DemoRequestModal({ open, onClose }) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [form, setForm] = useState({
     name: "",
     organisation: "",
@@ -351,11 +353,45 @@ function DemoRequestModal({ open, onClose }) {
 
   function updateField(field, value) {
     setSubmitted(false);
+    setSubmitError("");
     setForm((current) => ({ ...current, [field]: value }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setSubmitting(true);
+    setSubmitError("");
+
+    const demoApiUrl = process.env.NEXT_PUBLIC_DEMO_API_URL;
+
+    if (demoApiUrl) {
+      try {
+        const response = await fetch(demoApiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+
+        if (!response.ok) {
+          throw new Error("Demo request failed");
+        }
+
+        setSubmitted(true);
+        setForm({
+          name: "",
+          organisation: "",
+          email: "",
+          product: "Waste Audit",
+          message: "",
+        });
+        setSubmitting(false);
+        return;
+      } catch (error) {
+        setSubmitError("Your request could not be sent. Please email demo@etchealthtech.com.");
+        setSubmitting(false);
+        return;
+      }
+    }
 
     const subject = encodeURIComponent(`ETC HealthTech demo request - ${form.product}`);
     const body = encodeURIComponent(
@@ -374,6 +410,7 @@ function DemoRequestModal({ open, onClose }) {
 
     window.location.href = `mailto:demo@etchealthtech.com?subject=${subject}&body=${body}`;
     setSubmitted(true);
+    setSubmitting(false);
   }
 
   return (
@@ -445,7 +482,13 @@ function DemoRequestModal({ open, onClose }) {
 
           {submitted ? (
             <div className="demo-form-note">
-              Your Request Has Been Sent
+              Your request has been sent. We will be in touch shortly.
+            </div>
+          ) : null}
+
+          {submitError ? (
+            <div className="demo-form-error">
+              {submitError}
             </div>
           ) : null}
 
@@ -453,8 +496,8 @@ function DemoRequestModal({ open, onClose }) {
             <button className="button secondary" type="button" onClick={onClose}>
               Cancel
             </button>
-            <button className="button primary" type="submit">
-              Send request
+            <button className="button primary" type="submit" disabled={submitting}>
+              {submitting ? "Sending..." : "Send request"}
             </button>
           </div>
         </form>
