@@ -1,0 +1,82 @@
+body {
+  overflow-x: hidden;
+}
+
+main {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+}
+
+.gains-grid h3 {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  html,
+  body,
+  main {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand strong {
+    font-size: 16px;
+  }
+
+  .header-action {
+    display: none;
+  }
+
+  .hero-section,
+  .hero-copy,
+  .hero-product {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-section {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero-copy p,
+  .hero-copy h1,
+  .hero-copy .section-kicker {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .product-window {
+    width: 100%;
+  }
+
+  .hero-copy h1 {
+    font-size: 40px;
+  }
+
+  .hero-title {
+    font-size: 25px;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section-kicker {
+    line-height: 1.5;
+  }
+}
