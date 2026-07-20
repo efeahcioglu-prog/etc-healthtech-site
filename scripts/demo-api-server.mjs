@@ -134,7 +134,8 @@ const server = http.createServer(async (request, response) => {
     return;
   }
 
-  if (request.method === "POST" && request.url === "/demo-request") {
+  // DigitalOcean may trim the /demo-request routing prefix before forwarding.
+  if (request.method === "POST" && (request.url === "/demo-request" || request.url === "/")) {
     try {
       await handleDemoRequest(request, response, corsOrigin);
     } catch (error) {
