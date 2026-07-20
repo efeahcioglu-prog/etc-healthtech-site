@@ -83,6 +83,63 @@ function createTransporter() {
   });
 }
 
+async function sendWithGraph({ from, to, replyTo, subject, text }) {
+  const tenantId = process.env.GRAPH_TENANT_ID;
+  const clientId = process.env.GRAPH_CLIENT_ID;
+  const clientSecret = process.env.GRAPH_CLIENT_SECRET;
+  const sender = process.env.GRAPH_SENDER || from;
+
+  if (!tenantId || !clientId || !clientSecret || !sender) {
+    return false;
+  }
+
+  const tokenBody = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    scope: "https://graph.microsoft.com/.default",
+    grant_type: "client_credentials",
+  });
+  const tokenResponse = await fetch(
+    `https://login.microsoftonline.com/${encodeURIComponent(tenantId)}/oauth2/v2.0/token`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: tokenBody,
+    },
+  );
+
+  if (!tokenResponse.ok) {
+    throw new Error(`Microsoft Graph token request failed (${tokenResponse.status}).`);
+  }
+
+  const { access_token: accessToken } = await tokenResponse.json();
+  const mailResponse = await fetch(
+    `https://graph.microsoft.com/v1.0/users/${encodeURIComponent(sender)}/sendMail`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: {
+          subject,
+          body: { contentType: "Text", content: text },
+          toRecipients: [{ emailAddress: { address: to } }],
+          replyTo: [{ emailAddress: { address: replyTo } }],
+        },
+        saveToSentItems: true,
+      }),
+    },
+  );
+
+  if (!mailResponse.ok) {
+    throw new Error(`Microsoft Graph sendMail failed (${mailResponse.status}).`);
+  }
+
+  return true;
+}
+
 async function handleDemoRequest(request, response, corsOrigin) {
   const rawBody = await readBody(request);
   const parsed = JSON.parse(rawBody || "{}");
@@ -96,27 +153,26 @@ async function handleDemoRequest(request, response, corsOrigin) {
   const { name, organisation, email, product, message } = validation.value;
   const to = process.env.DEMO_TO || "demo@etchealthtech.com";
   const from = process.env.SMTP_FROM || process.env.SMTP_USER;
-  const transporter = createTransporter();
+  const subject = `ETC HealthTech demo request - ${product}`;
+  const text = [
+    "New ETC HealthTech demo request",
+    "",
+    `Name: ${name}`,
+    `Organisation: ${organisation}`,
+    `Email: ${email}`,
+    `Interested product: ${product}`,
+    "",
+    "Message:",
+    message || "No additional message provided.",
+    "",
+    "Source: etchealthtech.com",
+  ].join("\n");
 
-  await transporter.sendMail({
-    from,
-    to,
-    replyTo: email,
-    subject: `ETC HealthTech demo request - ${product}`,
-    text: [
-      "New ETC HealthTech demo request",
-      "",
-      `Name: ${name}`,
-      `Organisation: ${organisation}`,
-      `Email: ${email}`,
-      `Interested product: ${product}`,
-      "",
-      "Message:",
-      message || "No additional message provided.",
-      "",
-      "Source: etchealthtech.com",
-    ].join("\n"),
-  });
+  const sentWithGraph = await sendWithGraph({ from, to, replyTo: email, subject, text });
+  if (!sentWithGraph) {
+    const transporter = createTransporter();
+    await transporter.sendMail({ from, to, replyTo: email, subject, text });
+  }
 
   sendJson(response, 200, { ok: true }, corsOrigin);
 }
