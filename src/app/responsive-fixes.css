@@ -15,6 +15,101 @@ img {
   margin-top: 0;
 }
 
+.brand,
+.nav-links a,
+.header-action,
+.button,
+.text-link,
+.contact-options a,
+.product-gallery figure,
+.policy-nav a,
+.site-footer a,
+.demo-modal-close {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.brand:hover {
+  opacity: 0.86;
+}
+
+.nav-links a:hover,
+.site-footer a:hover {
+  transform: translateY(-1px);
+}
+
+.header-action:hover,
+.button:hover,
+.demo-modal-close:hover {
+  box-shadow: 0 10px 24px rgba(17, 44, 70, 0.18);
+  transform: translateY(-2px);
+}
+
+.button.secondary:hover {
+  border-color: var(--blue);
+  background: #eef4f8;
+  color: var(--blue-dark);
+}
+
+.text-link:hover {
+  color: var(--blue);
+  border-bottom-color: var(--teal);
+  transform: translateX(3px);
+}
+
+.contact-options a:hover {
+  padding-left: 14px;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.product-gallery figure:hover {
+  border-color: var(--blue);
+  box-shadow: 0 18px 44px rgba(17, 44, 70, 0.14);
+  transform: translateY(-4px);
+}
+
+.product-gallery figure:hover img {
+  filter: saturate(1.04) contrast(1.02);
+}
+
+.header-action:focus-visible,
+.button:focus-visible,
+.text-link:focus-visible,
+.nav-links a:focus-visible,
+.contact-options a:focus-visible,
+.policy-nav a:focus-visible,
+.site-footer a:focus-visible,
+.demo-modal-close:focus-visible {
+  outline: 3px solid rgba(23, 105, 170, 0.28);
+  outline-offset: 3px;
+}
+
+@media (max-width: 1050px) {
+  .policy-hero,
+  .policy-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .policy-hero-card {
+    max-width: 520px;
+  }
+
+  .policy-nav {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .policy-nav strong {
+    width: 100%;
+  }
+}
+
 @media (max-width: 720px) {
   html,
   body,
@@ -78,5 +173,46 @@ img {
 
   .section-kicker {
     line-height: 1.5;
+  }
+
+  .policy-hero {
+    padding: 58px 18px 46px;
+  }
+
+  .policy-hero h1 {
+    font-size: 40px;
+  }
+
+  .policy-hero p {
+    font-size: 16px;
+  }
+
+  .policy-layout {
+    padding: 38px 18px 68px;
+    gap: 24px;
+  }
+
+  .policy-nav {
+    gap: 6px;
+  }
+
+  .policy-nav a {
+    flex: 1 1 140px;
+    border-left: 0;
+    border-top: 3px solid transparent;
+  }
+
+  .policy-nav a:hover,
+  .policy-nav a.active {
+    border-left-color: transparent;
+    border-top-color: var(--blue);
+  }
+
+  .policy-card section {
+    padding: 26px 22px;
+  }
+
+  .policy-note {
+    margin: 24px 22px 28px;
   }
 }

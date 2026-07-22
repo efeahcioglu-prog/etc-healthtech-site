@@ -5,6 +5,10 @@ export const metadata = {
   title: "ETC HealthTech | Healthcare Operational Workflow Software",
   description:
     "Practical healthcare operational software for waste audit compliance, evidence-based reporting, porter tracking and offline continuity.",
+  icons: {
+    icon: "/assets/icon.png",
+    apple: "/assets/icon.png",
+  },
 };
 
 export const viewport = {

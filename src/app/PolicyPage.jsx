@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { lastUpdated, policies } from "./policies";
 
 const policyLinks = [
@@ -13,34 +14,44 @@ export function PolicyPage({ policyKey }) {
   const policy = policies[policyKey];
 
   return (
-    <main>
+    <main className="policy-shell">
       <header className="site-header">
         <Link className="brand" href="/" aria-label="ETC HealthTech home">
-          <span className="brand-mark">ETC</span>
-          <span>
-            <strong>ETC HealthTech</strong>
-            <small>Operational healthcare software</small>
-          </span>
+          <Image src="/assets/icon.png" alt="" width={48} height={48} />
+          <span><strong>ETC HealthTech</strong><small>Healthcare operations software</small></span>
         </Link>
         <nav className="nav-links" aria-label="Policy navigation">
           <Link href="/#products">Products</Link>
           <Link href="/#security">Security</Link>
-          <Link href="/#contact">Contact us</Link>
+          <Link href="/#contact">Contact</Link>
         </nav>
-        <Link className="mobile-demo-button" href="/#contact">Contact us</Link>
+        <Link className="header-action" href="/#contact">Contact us</Link>
       </header>
 
       <section className="policy-hero">
-        <span className="section-kicker">Policy</span>
-        <h1>{policy.title}</h1>
-        <p>{policy.intro}</p>
-        <small>Last updated: {lastUpdated}</small>
+        <div>
+          <span className="section-kicker">Policy centre</span>
+          <h1>{policy.title}</h1>
+          <p>{policy.intro}</p>
+        </div>
+        <aside className="policy-hero-card" aria-label="Policy summary">
+          <span>Last updated</span>
+          <strong>{lastUpdated}</strong>
+          <p>Product, privacy and security information for ETC HealthTech website visitors and customers.</p>
+        </aside>
       </section>
 
       <section className="policy-layout">
         <aside className="policy-nav" aria-label="Policy pages">
+          <strong>Policy pages</strong>
           {policyLinks.map(([label, href]) => (
-            <Link key={href} href={href}>{label}</Link>
+            <Link
+              key={href}
+              className={href === `/${policyKey}` ? "active" : ""}
+              href={href}
+            >
+              {label}
+            </Link>
           ))}
         </aside>
         <article className="policy-card">
@@ -59,9 +70,11 @@ export function PolicyPage({ policyKey }) {
       </section>
 
       <footer className="site-footer">
-        <strong>ETC HealthTech</strong>
-        <span>Practical operational software for healthcare teams.</span>
-        <nav className="footer-links" aria-label="Footer policy links">
+        <div>
+          <strong>ETC HealthTech</strong>
+          <span>Practical operational software for healthcare teams.</span>
+        </div>
+        <nav aria-label="Footer policy links">
           {policyLinks.map(([label, href]) => (
             <Link key={href} href={href}>{label}</Link>
           ))}

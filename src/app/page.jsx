@@ -27,7 +27,7 @@ export default function Home() {
     <main>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="ETC HealthTech home">
-          <Image src="/assets/brand/etc-icon.png" alt="" width={48} height={48} />
+          <Image src="/assets/icon.png" alt="" width={48} height={48} />
           <span><strong>ETC HealthTech</strong><small>Healthcare operations software</small></span>
         </a>
         <nav className="nav-links" aria-label="Main navigation">
